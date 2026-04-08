@@ -1,0 +1,22 @@
+name: Stock Bot Every 5 Min
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # 這裡設定每 5 分鐘跑一次
+  workflow_dispatch:      # 讓你可以手動點擊測試
+jobs:
+  run_bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install tools
+        run: pip install requests beautifulsoup4
+      - name: Run Python script
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py
